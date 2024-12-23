@@ -10,6 +10,7 @@ interface IProps {
     id: number;
     title: string;
   }[];
+  persons?: { id: number; name: string }[];
 }
 
 const Column: React.FC<IProps> = ({ tasks }) => {
@@ -27,10 +28,9 @@ const Column: React.FC<IProps> = ({ tasks }) => {
         margin: "50px auto",
       }}
     >
-      {/* Context that will be drag and drop */}
       <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
         {tasks.map((task) => (
-          <Task key={task.id} id={task.id} title={task.title} />
+          <Task key={task.id} task={task} />
         ))}
       </SortableContext>
     </Box>
