@@ -4,6 +4,8 @@ import {
   closestCorners,
   DndContext,
   DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   TouchSensor,
@@ -14,6 +16,7 @@ import { useState } from "react";
 import Columns from "./components/columns/Column";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Input from "./components/input/Input";
+import Task from "./components/tasks/Task";
 
 type ITask = {
   id: number;
@@ -27,30 +30,32 @@ function App() {
       id: 1,
       title: "Mahdi: Add automated tests to your codebase",
       persons: [
-        { id: 4, name: "Mahdi" },
-        { id: 5, name: "Betty" },
-        { id: 6, name: "Souhail" },
+        { id: 1, name: "Mahdi" },
+        { id: 2, name: "Betty" },
+        { id: 3, name: "Souhail" },
       ],
     },
     {
       id: 2,
       title: "Soumaya: Add stulelint to your codebase",
       persons: [
-        { id: 7, name: "Soumaya" },
-        { id: 8, name: "Betty" },
-        { id: 9, name: "Souhail" },
+        { id: 1, name: "Soumaya" },
+        { id: 2, name: "Betty" },
+        { id: 3, name: "Souhail" },
       ],
     },
     {
       id: 3,
       title: "Yamal: Add prettier to your codebase",
       persons: [
-        { id: 10, name: "Yamal" },
-        { id: 11, name: "Mbampe" },
-        { id: 12, name: "Souhail" },
+        { id: 1, name: "Yamal" },
+        { id: 2, name: "Mbampe" },
+        { id: 3, name: "Souhail" },
       ],
     },
   ]);
+
+  const [draggingTask, setDraggingTask] = useState<ITask | null>(null);
 
   const addTask = (title: string): void => {
     setTasks([{ id: tasks.length + 1, title, persons: [] }, ...tasks]);
@@ -64,12 +69,17 @@ function App() {
     })
   );
 
-  // Activate the Drag and Drop
-  const getTaskPos = (id: any): number => {
-    return tasks.findIndex((task) => task.id === id); // Add comment: Retrieve index of task by ID
+  const getTaskPos = (id: any): number =>
+    tasks.findIndex((task) => task.id === id);
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const taskId = event.active.id;
+    const task = tasks.find((task) => task.id === taskId);
+    setDraggingTask(task || null);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
+    setDraggingTask(null); // Clear overlay
     const { active, over } = event;
 
     //if (!over || active.id === over.id) return;
@@ -93,9 +103,13 @@ function App() {
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
         <Columns tasks={tasks} />
+        <DragOverlay>
+          {draggingTask && <Task task={draggingTask} />}
+        </DragOverlay>
       </DndContext>
     </Container>
   );

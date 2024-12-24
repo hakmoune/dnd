@@ -30,28 +30,25 @@ const Task: React.FC<IProps> = ({ task }) => {
   };
 
   return (
-    <Box>
-      <Box
-        ref={setNodeRef}
-        {...attributes}
-        {...listeners}
-        style={style}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "white",
-          padding: "10px",
-          borderRadius: "5px",
-          gap: "20px",
-          touchAction: "none",
-        }}
-      >
+    <Box
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "10px",
+        backgroundColor: "white",
+        padding: "10px",
+        borderRadius: "5px",
+      }}
+    >
+      <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <Checkbox />
-        <Typography variant="body1" component="p">
-          {title}
-        </Typography>
+        <Typography>{title}</Typography>
       </Box>
-      <Persons persons={persons ?? []} />
+      <Persons persons={persons!} />
     </Box>
   );
 };
