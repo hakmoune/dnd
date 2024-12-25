@@ -2,6 +2,7 @@ import { Box, Checkbox, Typography } from "@mui/material";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Persons from "../persons/Persons";
+import { DragIndicator } from "@mui/icons-material";
 
 interface IProps {
   task: {
@@ -33,7 +34,6 @@ const Task: React.FC<IProps> = ({ task }) => {
     <Box
       ref={setNodeRef}
       {...attributes}
-      {...listeners}
       style={style}
       sx={{
         display: "flex",
@@ -45,6 +45,11 @@ const Task: React.FC<IProps> = ({ task }) => {
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <DragIndicator
+          {...listeners}
+          fontSize="small"
+          style={{ cursor: "grab", color: "gray" }}
+        />
         <Checkbox />
         <Typography>{title}</Typography>
       </Box>
