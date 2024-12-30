@@ -5,15 +5,21 @@ import {
 } from "@dnd-kit/sortable";
 import Task from "../tasks/Task";
 
+type ITask = {
+  id: number;
+  title: string;
+  persons?: { id: number; name: string }[];
+};
 interface IProps {
   tasks: {
     id: number;
     title: string;
   }[];
   persons?: { id: number; name: string }[];
+  setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
 }
 
-const Column: React.FC<IProps> = ({ tasks }) => {
+const Column: React.FC<IProps> = ({ tasks, setTasks }) => {
   return (
     <Box
       sx={{
@@ -21,16 +27,13 @@ const Column: React.FC<IProps> = ({ tasks }) => {
         borderRadius: "5px",
         padding: "15px",
         width: "80%",
-        maxWidth: "500px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "15px",
+        maxWidth: "700px",
         margin: "50px auto",
       }}
     >
       <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
         {tasks.map((task) => (
-          <Task key={task.id} task={task} />
+          <Task key={task.id} task={task} setTasks={setTasks} />
         ))}
       </SortableContext>
     </Box>

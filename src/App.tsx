@@ -4,8 +4,6 @@ import {
   closestCorners,
   DndContext,
   DragEndEvent,
-  DragOverlay,
-  DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   TouchSensor,
@@ -16,7 +14,6 @@ import { useState } from "react";
 import Columns from "./components/columns/Column";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import Input from "./components/input/Input";
-import Task from "./components/tasks/Task";
 
 type ITask = {
   id: number;
@@ -39,23 +36,22 @@ function App() {
       id: 2,
       title: "Soumaya: Add stulelint to your codebase",
       persons: [
-        { id: 1, name: "Soumaya" },
-        { id: 2, name: "Betty" },
-        { id: 3, name: "Souhail" },
+        { id: 10, name: "Soumaya" },
+        { id: 20, name: "Betty" },
+        { id: 30, name: "Souhail" },
       ],
     },
     {
       id: 3,
       title: "Yamal: Add prettier to your codebase",
       persons: [
-        { id: 1, name: "Yamal" },
-        { id: 2, name: "Mbampe" },
-        { id: 3, name: "Souhail" },
+        { id: 100, name: "Yamal" },
+        { id: 200, name: "Mbampe" },
+        { id: 300, name: "Souhail" },
       ],
     },
   ]);
-
-  const [draggingTask, setDraggingTask] = useState<ITask | null>(null);
+  console.log("tasks", tasks);
 
   const addTask = (title: string): void => {
     setTasks([{ id: tasks.length + 1, title, persons: [] }, ...tasks]);
@@ -72,17 +68,9 @@ function App() {
   const getTaskPos = (id: any): number =>
     tasks.findIndex((task) => task.id === id);
 
-  const handleDragStart = (event: DragStartEvent) => {
-    const taskId = event.active.id;
-    const task = tasks.find((task) => task.id === taskId);
-    setDraggingTask(task || null);
-  };
-
   const handleDragEnd = (event: DragEndEvent) => {
-    setDraggingTask(null); // Clear overlay
     const { active, over } = event;
 
-    //if (!over || active.id === over.id) return;
     if (!active || !over || active.id === over.id) return;
 
     setTasks((tasks) => {
@@ -100,16 +88,13 @@ function App() {
       </Typography>
 
       <Input onSubmit={addTask} />
+
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <Columns tasks={tasks} />
-        <DragOverlay>
-          {draggingTask && <Task task={draggingTask} />}
-        </DragOverlay>
+        <Columns tasks={tasks} setTasks={setTasks} />
       </DndContext>
     </Container>
   );

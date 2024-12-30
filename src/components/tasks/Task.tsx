@@ -1,60 +1,68 @@
-import { Box, Checkbox, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Checkbox,
+  Typography,
+} from "@mui/material";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Persons from "../persons/Persons";
 import { DragIndicator } from "@mui/icons-material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+type ITask = {
+  id: number;
+  title: string;
+  persons?: { id: number; name: string }[];
+};
 interface IProps {
   task: {
     id: number;
     title: string;
     persons?: { id: number; name: string }[];
   };
+  setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
 }
 
-const Task: React.FC<IProps> = ({ task }) => {
+const Task: React.FC<IProps> = ({ task, setTasks }) => {
   const { id, title, persons } = task;
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
-  // const style = {
-  //   transition,
-  //   transform: CSS.Transform.toString(transform),
-  // };
-
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
     boxShadow: transform ? "0px 4px 6px rgba(0, 0, 0, 0.1)" : undefined,
-    opacity: transform ? 0.9 : 1, // Add comment: Enhance dragged item appearance
+    opacity: transform ? 0.9 : 1,
   };
 
   return (
-    <Box
-      ref={setNodeRef}
-      {...attributes}
-      style={style}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "10px",
-        backgroundColor: "white",
-        padding: "10px",
-        borderRadius: "5px",
-      }}
-    >
-      <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+    <Accordion ref={setNodeRef} {...attributes} style={style}>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1-content"
+        id="panel1-header"
+        sx={{
+          "& > .MuiAccordionSummary-content": {
+            alignItems: "center",
+            gap: "15px",
+          },
+        }}
+      >
         <DragIndicator
           {...listeners}
           fontSize="small"
           style={{ cursor: "grab", color: "gray" }}
         />
-        <Checkbox />
-        <Typography>{title}</Typography>
-      </Box>
-      <Persons persons={persons!} />
-    </Box>
+        <Checkbox onClick={(e) => e.stopPropagation()} />
+        <Typography component="span">{title}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Persons persons={persons!} setTasks={setTasks} />
+      </AccordionDetails>
+    </Accordion>
   );
 };
 
