@@ -1,5 +1,4 @@
 import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import {
   Accordion,
   AccordionDetails,
@@ -21,7 +20,9 @@ const Person: React.FC<PersonProps> = ({ person }) => {
 
   const style = {
     transition,
-    transform: CSS.Transform.toString(transform),
+    transform: transform
+      ? `translate(${transform.x}px, ${transform.y}px)`
+      : "none",
     boxShadow: transform ? "0px 4px 8px rgba(0, 0, 0, 0.2)" : undefined,
     opacity: transform ? 0.9 : 1,
     borderRadius: "8px",

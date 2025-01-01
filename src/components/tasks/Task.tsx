@@ -6,7 +6,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import Persons from "../persons/Persons";
 import { DragIndicator } from "@mui/icons-material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -33,7 +32,9 @@ const Task: React.FC<IProps> = ({ task, setTasks }) => {
 
   const style = {
     transition,
-    transform: CSS.Transform.toString(transform),
+    transform: transform
+      ? `translate(${transform.x}px, ${transform.y}px)`
+      : "none",
     boxShadow: transform ? "0px 4px 6px rgba(0, 0, 0, 0.1)" : undefined,
     opacity: transform ? 0.9 : 1,
   };
