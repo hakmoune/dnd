@@ -65,8 +65,9 @@ function App() {
     })
   );
 
+  // We considre the title as the id
   const getTaskPos = (id: any): number =>
-    tasks.findIndex((task) => task.id === id);
+    tasks.findIndex((task) => task.title === id);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;

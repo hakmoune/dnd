@@ -31,7 +31,10 @@ const Column: React.FC<IProps> = ({ tasks, setTasks }) => {
         margin: "50px auto",
       }}
     >
-      <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
+      <SortableContext
+        items={tasks.map((task) => task.title)}
+        strategy={verticalListSortingStrategy}
+      >
         {tasks.map((task) => (
           <Task key={task.id} task={task} setTasks={setTasks} />
         ))}

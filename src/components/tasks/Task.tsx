@@ -25,10 +25,10 @@ interface IProps {
 }
 
 const Task: React.FC<IProps> = ({ task, setTasks }) => {
-  const { id, title, persons } = task;
+  const { title, persons } = task;
 
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
+    useSortable({ id: title });
 
   const style = {
     transition,
